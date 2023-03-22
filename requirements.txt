@@ -1,2 +1,4 @@
+docopt
+PyYAML
 selenium
 pyinstaller
