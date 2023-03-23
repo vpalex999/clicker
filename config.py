@@ -20,7 +20,6 @@ class Config:
                 return self.data["login"]
             except KeyError:
                 print("The login attribute is not found in config-file")
-
         return None
 
     @property
@@ -30,8 +29,17 @@ class Config:
                 return self.data["password"]
             except KeyError:
                 print("The 'password' attribute is not found in config-file")
-
         return None
+    
+    @property
+    def order(self) -> str:
+        if self.data:
+            try:
+                return self.data["order"]
+            except KeyError:
+                print("The 'password' attribute is not found in config-file")
+        return ""
+
 
     def __str__(self) -> str:
         return str(self.data)

@@ -22,6 +22,9 @@ INPUT_LOGIN = (
     By.XPATH, "//input[contains(@name, 'Телефон  /  Email  /  СНИЛС')]")
 INPUT_PASSWORD = (By.XPATH, "//input[contains(@name, 'Пароль')]")
 IS_AUTHORIZED_USER = (By.XPATH, "//a[contains(@class, 'authorized-user')]")
+IS_ORDER_SAVED = (By.XPATH, "//h1[contains(text(), 'Заявление сохранено')]")
+SEND_ORDER = (By.XPATH, "//button/*[@contains(text(), 'Отправить заявление')]")
+IS_SEND_ORDER_DISABLED = (By.XPATH, "//button[@disabled='true' and /*[contains(text(), 'Отправить заявление')]]")
 
 url_login = "https://esia.gosuslugi.ru/login/"
 url_gos = "https://www.gosuslugi.ru/"
@@ -29,7 +32,7 @@ url_gos = "https://www.gosuslugi.ru/"
 
 def get_driver():
     driver_path = {
-        "Win": os.path.normpath(os.path.abspath('chromedriver.exe')),
+        "Windows": os.path.normpath(os.path.abspath('chromedriver.exe')),
         "Linux": os.path.normpath(os.path.abspath('chromedriver')),
     }
 
@@ -60,10 +63,15 @@ if __name__ == "__main__":
     wd.implicitly_wait(6)
     wd.find_element(*IS_AUTHORIZED_USER)
 
-    # обработать форму подозрительной активности.
-
-    # input("Выполните вход в ЛК\nПо завершении нажмите любую клавишу.")
-    # btn_orders = wd.find_element(*BUTTON_ORDERS)
-    # btn_orders.click()
-
-    time.sleep(10)
+    wd.get(config.order)
+    wd.find_element(*IS_ORDER_SAVED)
+    wd.implicitly_wait(3)
+    while True:
+        try:
+            wd.find_element(*IS_ORDER_SAVED)
+            print('form is loaded')
+            btn = wd.find_element(*SEND_ORDER)
+            btn.click()
+        except Exception as err:
+            wd.refresh()
+ 
