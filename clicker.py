@@ -40,6 +40,9 @@ IS_ORDER_SAVED = (By.XPATH, "//h1[contains(text(), 'Заявление сохр�
 BUTTON_SEND_ORDER = (
     By.XPATH, "//button/*[@contains(text(), 'Отправить заявление')]")
 
+# локатор: кнопка перейти на Главную.
+BUTTON_TO_MAIN = (By.XPATH, "//button/*[contains(text(), 'На главную')]")
+
 # локатор: кнопка "Отправить заявление" в состоянии - выключена(неактивна).
 IS_SEND_ORDER_DISABLED = (
     By.XPATH, "//button[@disabled='true' and /*[contains(text(), 'Отправить заявление')]]")
@@ -90,12 +93,16 @@ if __name__ == "__main__":
 
     # переход на форму заявления
     wd.get(config.order)
-    # цикл отправки формы.
     wd.implicitly_wait(3)
+    # цикл отправки формы.
     while True:
         try:
+            time.sleep(.2)
             wd.find_element(*IS_ORDER_SAVED)
             btn = wd.find_element(*BUTTON_SEND_ORDER)
             btn.click()
         except Exception as err:
             wd.refresh()
+        else:
+            #break
+            wd.get(config.order)
